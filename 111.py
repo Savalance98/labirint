@@ -1,11 +1,17 @@
 class LabirintTurtle():
-    def load_map():
+    def __init__(self):
+        self.f = None
+    def load_map(self, name):
+        self.f = open(name, "r")
+        return self.f.read()
+    def show_map(self):
         pass
-    def show_map():
+    def check_map(self):
         pass
-    def check_map():
+    def exit_count_step(self):
         pass
-    def exit_count_step():
+    def exit_show_step(self):
         pass
-    def exit_show_step():
-        pass
+
+b = LabirintTurtle()
+print(b.load_map("1map.txt"))
