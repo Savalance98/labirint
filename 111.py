@@ -3,6 +3,7 @@ class LabirintTurtle():
         self.f = None
         self.m = list()
         self.m2 = list()
+        self.ex = list()
         self.x = None
         self.y = None
     def load_map(self, name):
@@ -29,7 +30,7 @@ class LabirintTurtle():
             for t in i:
                 if t != "*" and t != " ":
                     s += 1
-        for i in [1,-1]:
+        for i in [0, -1]:
             if " " in self.m[i]:
                 w += 1
         for i in range(1, len(self.m) - 1):
@@ -37,13 +38,30 @@ class LabirintTurtle():
                 w += 1
         if s != 0 or w != 1 or self.x == None or self.y == None or self.m[self.y][self.x] != " ":
             print("Загрузите другую карту")
+
     def exit_count_step(self):
-        pass
+        q = 0
+        for i in 0, -1:
+            for t in self.m[i]:
+                if " " == t and i == 0 or i == len(self.m):
+                    self.ex.append(i)
+                    self.ex.append(q)
+                q += 1
+        for i in range(1,len(self.m) - 1):
+            if " " == self.m[i][0]:
+                self.ex.append(i)
+                self.ex.append(0)
+
+        print(self.ex)
+        # while self.m[self.y -1 ][self.x] == "*":
+        #     while self.m[self.y][self.x + 1] ==
     def exit_show_step(self):
         pass
 
 b = LabirintTurtle()
 b.load_map("l1.txt")
+b.show_map(turtle=True)
 b.check_map()
+b.exit_count_step()
 
 
