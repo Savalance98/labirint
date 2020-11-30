@@ -1,32 +1,22 @@
 import emoji
-
 class LabirintTurtle:
+
     def __init__(self):
         self.map = []  # карта лабиринта
         self.work_map = []  # рабочая карта состоящая из чисел
         self.x = None  # координаты черепахи
         self.y = None
 
-    def load_map(self, name):
-        file = open(name, 'r')
-        lab = file.read().split('\n')
-        file.close()
+    def load_map(self, name):  # Загружаем карту
+        file = open(name, 'r')  # Открываем файл на чтение
+        lab = file.read().split('\n')  # Считываем файл и делаем сплит по символу конца строки
+        file.close()  # закрываем файл
 
-        self.x = lab.pop()
+        self.x = lab.pop()  # Достаем из считанного массива координаты черепахи
         self.y = lab.pop()
 
-        self.map = [list(line) for line in lab] # преобразуем каждую считанную строку в массив
-        # for i in self.map:            # * меняются на стены
-        #     p = 0
-        #     for u in i:
-        #         if u == "*":
-        #             self.map[self.map.index(i)][p] = '\N{Ladder}'
-        #         p += 1
+        self.map = [list(line) for line in lab]  # преобразуем каждую считанную строку в массив
         self.work_map = [list(map(int, list(line.replace('*', '1').replace(' ', '0')))) for line in lab]  #на основе считанного массива строим массив из 0 и 1
-
-        for i in self.map:
-            print(*i, sep='\t')
-
     def check_map(self):
         if not self.check():  # проверяем валидность карты
             self.map = []  # сбрасываем параметры и выводим сообщение
@@ -41,7 +31,7 @@ class LabirintTurtle:
         try:
             self.x = int(self.x)  # проверка валидности координат
             self.y = int(self.y)
-        except:
+        except ValueError:
             return False
 
         for line in self.map:  # проверка присутствия только символов "*" и " "
@@ -52,18 +42,14 @@ class LabirintTurtle:
             ext += int(line[0] == ' ') + int(line[-1] == ' ')  # проверка наличия боковых выходов
 
         ext += self.map[0].count(' ') + self.map[-1].count(' ')  # общее количество выходов
-        if ext != 1:  # если выходов нет или их больше 1
+        if ext > 1 or ext == 0:  # если выходов нет или их больше 1
             return False
 
         if self.map[self.x][self.y] != ' ':  # если координаты черепахи совпадают со стеной
             return False
 
         self.voln(self.x, self.y, 1)  # проверка наличия тупиков
-        if self.get_exit_coord():
-            ex = self.get_exit_coord()[0]
-            ey = self.get_exit_coord()[1]
-        else:
-            return False
+        ex,ey = self.get_exit_coord()
         if self.work_map[ex][ey] == 0:
             return False
 
@@ -79,24 +65,28 @@ class LabirintTurtle:
             print()
 
     def get_exit_coord(self):
-        ex = []
-        q = 0
-        for i in 0, -1:
-            for t in self.map[i]:
-                if " " == t and i == 0 or i == len(self.map):
-                    ex.append(i)
-                    ex.append(q)
-                q += 1
-        for i in range(1, len(self.map) - 1):
-            if " " == self.map[i][0]:
-                ex.append(i)
-                ex.append(0)
-        return ex
+        ext = []
+        for i in range(len(self.map)):
+            if self.map[i][0] == ' ':
+                ext.append(i)
+                ext.append(0)
+                break
+            elif self.map[i][-1] == ' ':
+                ext.append(i)
+                ext.append(len(self.map[i]) - 1)
+                break
+        if ' ' in self.map[0]:
+            ext.append(0)
+            ext.append(self.map[0].index(' '))
+        elif ' ' in self.map[-1]:
+            ext.append(len(self.map))
+            ext.append(self.map[-1].index(' '))
+
+        return ext
 
     def voln(self, x, y, cur=1):
         if not self.x:
             return
-
         self.work_map[x][y] = cur
         n = len(self.work_map)
         m = len(self.work_map[0])
@@ -118,6 +108,7 @@ class LabirintTurtle:
         if not self.x:
             return
 
+        self.check()
         ex, ey = self.get_exit_coord()
         print("\033[4m\033[36m\033[43m{}\033[0m".format(self.work_map[ex][ey] - 1))
 
@@ -144,34 +135,28 @@ class LabirintTurtle:
                 y + 1] == ' ':
                 path.append([x, y + 1])
                 y = y + 1
+
         return path
 
     def exit_show_step(self):
         if not self.x:
             return
-
         self.check()
         path = self.get_path()
         for i in range(len(self.map)):
             for j in range(len(self.map[0])):
                 if i == self.x and j == self.y:
                     print(emoji.emojize(":turtle:"), end=' ')
-                    # print('\N{Ladder}', end=' ' )  # сремянка, стена
                 elif [i, j] in path:
-                    print("\033[34m{}\033[0m".format('.'), end=' ')
+                    print("\033[34m{}\033[0m".format('•'), end=' ')
                 else:
                     print(self.map[i][j], end=' ')
             print()
 
 a = LabirintTurtle()
-# a.load_map('l1.txt')
-a.load_map("l1.txt")
+a.load_map('l2.txt')
 # print(*a.work_map,sep='\n')
-# a.show_map()
-# a.get_exit_coord()
 # a.exit_count_step()
-# a.check_map()
 # print(*a.work_map, sep='\n')
-# a.exit_show_step()
-
-
+a.exit_show_step()
+# a.show_map(turtle=True)
