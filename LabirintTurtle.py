@@ -90,6 +90,9 @@ class LabirintTurtle:
         elif ' ' in self.map[-1]:
             ext.append(len(self.map))
             ext.append(self.map[-1].index(' '))
+        if len(ext) == 0:
+            print("нет выхода")
+            return
         m = 10000
         x = ext[0]
         y = ext[1]
@@ -251,11 +254,12 @@ class LabirintTurtle:
             q = i
 
 a = LabirintTurtle()
-a.load_map('l45.txt')
+a.load_map('l200.txt')
 # a.load_map('hard_test1.txt')
 # a.show_map(turtle=True)
 # print(*a.work_map,sep='\n')
 # a.exit_count_step()
+# a.check_map()
 # print(*a.work_map, sep='\n')
 # print(a.get_max_cell())
 a.exit_show_step() # long = True
