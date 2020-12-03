@@ -90,7 +90,16 @@ class LabirintTurtle:
         elif ' ' in self.map[-1]:
             ext.append(len(self.map))
             ext.append(self.map[-1].index(' '))
-        return ext
+        m = 10000
+        x = ext[0]
+        y = ext[1]
+        self.voln( self.x, self.y, 1 )
+        for i in range(0, len(ext)-2, 2):
+            if self.work_map[ext[i]][ext[i + 1]] < m:
+                m = self.work_map[ext[i]][ext[i + 1]]
+                x = ext[i]
+                y = ext[i+1]
+        return x, y
 
     def voln(self, x, y, cur=1):
         if not self.x:
@@ -242,7 +251,7 @@ class LabirintTurtle:
             q = i
 
 a = LabirintTurtle()
-a.load_map('l2.txt')
+a.load_map('l45.txt')
 # a.load_map('hard_test1.txt')
 # a.show_map(turtle=True)
 # print(*a.work_map,sep='\n')
