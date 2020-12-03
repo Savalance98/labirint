@@ -43,7 +43,7 @@ class LabirintTurtle:
             ext += int(line[0] == ' ') + int(line[-1] == ' ')  # проверка наличия боковых выходов
 
         ext += self.map[0].count(' ') + self.map[-1].count(' ')  # общее количество выходов
-        if ext > 1 or ext == 0:  # если выходов нет или их больше 1
+        if ext == 0:  # если выходов нет
             return False
 
         if self.map[self.x][self.y] != ' ':  # если координаты черепахи совпадают со стеной
@@ -90,7 +90,6 @@ class LabirintTurtle:
         elif ' ' in self.map[-1]:
             ext.append(len(self.map))
             ext.append(self.map[-1].index(' '))
-
         return ext
 
     def voln(self, x, y, cur=1):
@@ -146,7 +145,6 @@ class LabirintTurtle:
                 y + 1] == ' ':
                 path.append([x, y + 1])
                 y = y + 1
-        # import time
         while not [self.x, self.y] in pathm:
 
             if xm > 0 and self.work_map[xm - 1][ym] == self.work_map[xm][ym] - 1 and self.map[xm - 1][ym] == ' ':
@@ -179,11 +177,11 @@ class LabirintTurtle:
                 # if i > 0 and j == 0 or j == len(self.map[0]):
                 #     print(emoji.emojize("\033[32m{}\033[0m".format('|')))
                 if i == self.x and j == self.y:
-                    print(emoji.emojize(":turtle:"), end=' ') # Черепаха
+                    print(emoji.emojize(":turtle:"), end=' ')               # Черепаха
                 elif [i, j] in path:
                     print("❇️", end=' ')  # Символ троектории ❇️
                 elif self.map[i][j] == ' ':
-                    print('♿️', end=' ')  # Пустое место
+                    print('🦋️', end=' ')  # Пустое место
                 else:
                     print('🚷', end=' ')  # Стена
             print()
@@ -191,12 +189,12 @@ class LabirintTurtle:
     def get_max_cell(self):
         x = y = None
         m = -1
-        for i in range( len( self.work_map ) ):
-            for j in range( len( self.work_map[0] ) ):
+        for i in range(len(self.work_map)):
+            for j in range(len(self.work_map[0])):
                 if self.work_map[i][j] > m:
                     m = self.work_map[i][j]
                     x, y = i, j
-        return [x,y]
+        return [x, y]
 
     def exit(self):
         a = "поверните налево"
@@ -244,8 +242,8 @@ class LabirintTurtle:
             q = i
 
 a = LabirintTurtle()
-# a.load_map('l2.txt')
-a.load_map('hard_test1.txt')
+a.load_map('l2.txt')
+# a.load_map('hard_test1.txt')
 # a.show_map(turtle=True)
 # print(*a.work_map,sep='\n')
 # a.exit_count_step()
